@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>وعي — كسر أنماط العلاقات السامة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#07070a;
+    --panel:#121215;
+    --panel-2:#1b1b1f;
+    --line:#2b2b30;
+    --silver:#b7bac0;
+    --silver-bright:#dfe1e4;
+    --white:#f7f7f4;
+    --muted:#8c8e93;
+    --danger:#e7e4dc;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px);}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--white);
+    font-family:'Tajawal',sans-serif;
+    font-weight:400;
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+  section{position:relative;}
+
+  /* film grain texture */
+  .grain{
+    position:fixed;inset:0;pointer-events:none;z-index:2;opacity:.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;top:0;z-index:20;
+    padding-top:calc(18px + env(safe-area-inset-top,0px));
+    padding-bottom:18px;
+    background:linear-gradient(var(--ink) 70%, transparent);
+    backdrop-filter:blur(6px);
+  }
+  nav{display:flex;align-items:center;justify-content:space-between;}
+  .brand{font-size:22px;font-weight:900;color:var(--white);}
+  .brand span{color:var(--silver);font-weight:400;font-size:13px;display:block;margin-top:2px;}
+  .navlinks{display:flex;gap:28px;font-size:14px;color:var(--silver);}
+  .navlinks a{transition:color .2s;padding:4px 2px;border-bottom:1px solid transparent;}
+  .navlinks a:hover,.navlinks a:focus-visible{color:var(--white);border-color:var(--silver);}
+  .nav-cta{
+    background:var(--white);color:var(--ink);padding:10px 20px;border-radius:2px;
+    font-weight:700;font-size:14px;transition:box-shadow .25s, background .25s;
+  }
+  .nav-cta:hover,.nav-cta:focus-visible{box-shadow:0 0 22px rgba(247,247,244,.5);}
+  .burger{display:none;background:none;border:1px solid var(--line);color:var(--white);padding:8px 12px;border-radius:2px;}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:64px 0 80px;overflow:hidden;}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;}
+  .hero-eyebrow{color:var(--silver);font-size:14px;margin:0 0 18px;}
+  .hero h1{
+    font-size:clamp(38px,5.2vw,64px);
+    font-weight:900;
+    margin:0 0 26px;
+    line-height:1.28;
+    color:var(--white);
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--white);
+    text-shadow:0 0 24px rgba(255,255,255,.55), 0 0 60px rgba(255,255,255,.18);
+  }
+  .hero p.lead{font-size:18px;color:var(--silver);max-width:52ch;margin:0 0 34px;}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:15px 26px;border-radius:2px;font-weight:700;font-size:15px;
+    border:1px solid var(--line);transition:transform .18s, box-shadow .25s, background .25s, border-color .25s;
+  }
+  .btn svg{width:19px;height:19px;flex:none;}
+  .btn-primary{background:var(--white);color:var(--ink);border-color:var(--white);}
+  .btn-primary:hover,.btn-primary:focus-visible{box-shadow:0 0 28px rgba(247,247,244,.55);transform:translateY(-1px);}
+  .btn-ghost{background:transparent;color:var(--white);}
+  .btn-ghost:hover,.btn-ghost:focus-visible{border-color:var(--silver-bright);background:rgba(255,255,255,.04);}
+
+  .hero-art{position:relative;aspect-ratio:1/1.05;}
+  .hero-art svg{width:100%;height:100%;}
+  .hero-art .caption{
+    position:absolute;bottom:14px;left:14px;font-size:12px;color:var(--muted);
+    writing-mode:vertical-rl;letter-spacing:0;
+  }
+
+  /* ---------- NOTICE / WELCOME STRIP ---------- */
+  .welcome{background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:46px 0;}
+  .welcome .wrap{display:grid;grid-template-columns:.6fr 1.4fr;gap:40px;align-items:start;}
+  .welcome h2{font-size:26px;font-weight:800;margin:0;color:var(--white);}
+  .welcome h2 small{display:block;font-size:14px;font-weight:400;color:var(--silver);margin-top:8px;}
+  .welcome p{color:var(--silver);font-size:16px;margin:0 0 14px;max-width:64ch;}
+  .disclaimer{
+    margin-top:18px;border:1px solid var(--line);background:var(--panel-2);
+    padding:20px 22px;border-radius:2px;display:flex;gap:14px;align-items:flex-start;
+  }
+  .disclaimer svg{flex:none;width:22px;height:22px;margin-top:3px;color:var(--silver-bright);}
+  .disclaimer p{margin:0;color:var(--silver);font-size:14.5px;}
+  .disclaimer strong{color:var(--white);}
+
+  /* ---------- PRICING ---------- */
+  .pricing{padding:88px 0 60px;}
+  .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:44px;flex-wrap:wrap;}
+  .section-head h2{font-size:clamp(28px,3.4vw,40px);font-weight:900;margin:0;}
+  .section-head p{color:var(--muted);font-size:15px;margin:8px 0 0;max-width:46ch;}
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .plan{background:var(--ink);padding:38px 30px;display:flex;flex-direction:column;gap:14px;position:relative;transition:background .3s;}
+  .plan:hover{background:var(--panel);}
+  .plan .tag{font-size:13px;color:var(--muted);}
+  .plan .name{font-size:20px;font-weight:800;color:var(--white);}
+  .plan .price{font-size:38px;font-weight:900;color:var(--white);margin-top:6px;}
+  .plan .price sub{font-size:15px;font-weight:400;color:var(--silver);margin-right:6px;}
+  .plan .duration{color:var(--silver);font-size:14px;}
+  .plan.featured{background:var(--panel-2);}
+  .plan.featured::before{
+    content:"الأكثر طلبًا";position:absolute;top:0;right:0;background:var(--white);color:var(--ink);
+    font-size:11px;font-weight:800;padding:5px 12px;
+  }
+  .plan a{margin-top:auto;padding-top:16px;color:var(--silver-bright);font-size:14px;font-weight:700;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px;}
+  .plan a:hover{color:var(--white);}
+
+  /* ---------- PLATFORMS / METHOD ---------- */
+  .split{padding:70px 0;border-top:1px solid var(--line);}
+  .split .wrap{display:grid;grid-template-columns:1fr 1fr;gap:70px;}
+  .split h3{font-size:22px;font-weight:800;margin:0 0 18px;}
+  .split p{color:var(--silver);font-size:15.5px;margin:0 0 10px;}
+  .platform-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0;}
+  .platform-list li{
+    display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);
+    color:var(--silver-bright);font-size:15px;
+  }
+  .platform-list li svg{width:18px;height:18px;color:var(--muted);flex:none;}
+  .steps{list-style:none;margin:0;padding:0;counter-reset:step;}
+  .steps li{counter-increment:step;padding:18px 0 18px 0;border-bottom:1px solid var(--line);display:flex;gap:16px;}
+  .steps li::before{
+    content:counter(step);font-weight:900;font-size:14px;color:var(--ink);background:var(--silver);
+    width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;
+  }
+  .steps li div b{display:block;color:var(--white);font-weight:700;margin-bottom:3px;font-size:15px;}
+  .steps li div span{color:var(--muted);font-size:14px;}
+
+  /* ---------- CTA / BOOKING ---------- */
+  .booking{padding:90px 0;background:var(--panel);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .booking .wrap{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+  .booking h2{font-size:clamp(28px,3.6vw,42px);font-weight:900;margin:0 0 16px;}
+  .booking p{color:var(--silver);font-size:16px;max-width:48ch;margin:0 0 26px;}
+  .contact-chips{display:flex;gap:14px;flex-wrap:wrap;}
+  .form-card{background:var(--panel-2);border:1px solid var(--line);padding:30px;border-radius:2px;}
+  .form-card label{display:block;font-size:13.5px;color:var(--silver);margin:0 0 7px;}
+  .form-row{margin-bottom:18px;}
+  .form-card input,.form-card select,.form-card textarea{
+    width:100%;background:var(--ink);border:1px solid var(--line);color:var(--white);
+    padding:12px 14px;font-family:inherit;font-size:14.5px;border-radius:2px;
+  }
+  .form-card textarea{min-height:96px;resize:vertical;}
+  .form-card input:focus,.form-card select:focus,.form-card textarea:focus{outline:2px solid var(--silver-bright);outline-offset:1px;}
+  .radio-row{display:flex;gap:10px;}
+  .radio-opt{
+    flex:1;border:1px solid var(--line);padding:11px;text-align:center;border-radius:2px;cursor:pointer;
+    font-size:13.5px;color:var(--silver);display:flex;align-items:center;justify-content:center;gap:7px;transition:border-color .2s, color .2s;
+  }
+  .radio-opt input{width:auto;accent-color:var(--white);}
+  .radio-opt.active{border-color:var(--white);color:var(--white);}
+  .form-card .btn{width:100%;justify-content:center;margin-top:6px;}
+  .form-note{font-size:12.5px;color:var(--muted);margin-top:12px;}
+
+  /* ---------- FOOTER ---------- */
+  footer{padding:54px 0 40px;}
+  footer .wrap{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap;}
+  .foot-brand{font-size:18px;font-weight:900;}
+  .foot-brand small{display:block;font-weight:400;font-size:13px;color:var(--muted);margin-top:6px;max-width:34ch;}
+  .social{display:flex;gap:12px;}
+  .social a{
+    width:42px;height:42px;border:1px solid var(--line);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;transition:border-color .2s, transform .2s;
+  }
+  .social a:hover,.social a:focus-visible{border-color:var(--silver-bright);transform:translateY(-2px);}
+  .social svg{width:18px;height:18px;}
+  .foot-legal{border-top:1px solid var(--line);margin-top:36px;padding-top:20px;font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{transition:none!important;}}
+
+  @media (max-width:900px){
+    .navlinks{display:none;}
+    .hero-grid{grid-template-columns:1fr;}
+    .hero-art{order:-1;max-width:340px;margin:0 auto;}
+    .welcome .wrap{grid-template-columns:1fr;}
+    .plans{grid-template-columns:1fr;}
+    .split .wrap{grid-template-columns:1fr;gap:40px;}
+    .booking .wrap{grid-template-columns:1fr;}
+    .section-head{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <div class="brand">وعي<span>مدرب علاقات عاطفية</span></div>
+      <div class="navlinks">
+        <a href="#welcome">قبل ما تبدأ</a>
+        <a href="#pricing">الأسعار</a>
+        <a href="#method">المنهج</a>
+        <a href="#booking">احجز الآن</a>
+      </div>
+      <a href="#booking" class="nav-cta">احجز جلستك</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="hero-eyebrow">دعم فردي — عن بُعد — بخصوصية تامة</p>
+        <h1>اكسر النمط <em>السام</em><br>اللي بيسيطر على علاقتك</h1>
+        <p class="lead">مساحة صريحة تفهم فيها طبيعة علاقتك بشريكك، تحلل الموقف بهدوء، وتبدأ تبني عادات أقرب للأمان وأبعد عن الأذى المتكرر.</p>
+        <div class="hero-actions">
+          <a href="#booking" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v12H7l-3 3V4z"/></svg>
+            احجز استشارتك الأولى
+          </a>
+          <a href="#welcome" class="btn btn-ghost">اقرأ التفاصيل أولاً</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 480 500" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="glow" cx="50%" cy="35%" r="70%">
+              <stop offset="0%" stop-color="#3a3a3e"/>
+              <stop offset="100%" stop-color="#07070a"/>
+            </radialGradient>
+            <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur stdDeviation="9"/>
+            </filter>
+            <linearGradient id="fig" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#d9dce0"/>
+              <stop offset="100%" stop-color="#4a4b4f"/>
+            </linearGradient>
+          </defs>
+          <rect width="480" height="500" fill="url(#glow)"/>
+          <g filter="url(#soft)" opacity="0.9">
+            <path d="M120 480 C110 380 130 330 100 300 C70 270 78 200 130 175 C160 160 200 165 218 195 C236 165 276 160 306 175 C358 200 366 270 336 300 C306 330 326 380 316 480 Z" fill="url(#fig)" opacity="0.5"/>
+          </g>
+          <g fill="url(#fig)">
+            <path d="M170 120 c0 -34 26 -58 58 -58 c32 0 58 24 58 58 c0 30 -22 52 -40 62 l0 30 l-36 0 l0 -30 c-18 -10 -40 -32 -40 -62 Z"/>
+            <path d="M150 500 C142 400 150 350 128 320 C104 292 112 232 156 210 C182 198 210 204 224 228 C224 228 224 400 220 500 Z" opacity="0.85"/>
+          </g>
+          <g fill="#f7f7f4" opacity="0.9">
+            <path d="M280 130 c0 -30 24 -52 52 -52 c28 0 52 22 52 52 c0 27 -20 46 -36 55 l0 27 l-32 0 l0 -27 c-16 -9 -36 -28 -36 -55 Z"/>
+            <path d="M262 500 C255 405 262 360 242 332 C220 306 227 250 268 230 C292 219 318 224 331 246 C331 246 331 405 328 500 Z" opacity="0.8"/>
+          </g>
+          <line x1="240" y1="60" x2="240" y2="500" stroke="#0a0a0c" stroke-width="3" opacity="0.7"/>
+        </svg>
+        <span class="caption">صورة تعبيرية — تباين أبيض وأسود</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- WELCOME + DISCLAIMER -->
+  <section class="welcome" id="welcome">
+    <div class="wrap">
+      <h2>أهلًا بيك <small>اقرا الجزء ده كويس</small></h2>
+      <div>
+        <p>أنا هنا عشان أساعدك تفهم طبيعة علاقتك بشريكك، وتكسر النمط السام والمؤذي لو كان بيحصل معاك. مش هحكم عليك، وهنشتغل مع بعض على أرضية واضحة من أول جلسة.</p>
+        <div class="disclaimer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4m0 4h.01M10.3 3.86 1.82 18a2 2 0 0 0 1.7 3h16.96a2 2 0 0 0 1.7-3L14.7 3.86a2 2 0 0 0-3.4 0Z"/></svg>
+          <p><strong>تنويه مهم:</strong> بقدّم دعم ونصيحة بناءً على خبرتي ومحتواي، ومش بوصف أي نوع من العقاقير أو الأدوية لحالتك. لو حالتك محتاجة تدخل طبي أو نفسي متخصص، هوجهك لحد مناسب. ولو سنّك أصغر من 18 سنة، للأسف مش هقدر أساعدك.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing" id="pricing">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>الأسعار والمدة</h2>
+        <p>اختار الجلسة المناسبة لحجم اللي بتمر بيه دلوقتي — من موقف سريع لمساحة أعمق.</p>
+      </div>
+      <div class="plans">
+        <div class="plan">
+          <span class="tag">موقف أو مشكلة بسيطة</span>
+          <span class="name">استشارة سريعة</span>
+          <span class="duration">20 دقيقة</span>
+          <span class="price">120<sub>جنيه</sub></span>
+          <a href="#booking">احجز هذه الجلسة ←</a>
+        </div>
+        <div class="plan featured">
+          <span class="tag">تحليل كامل لموقفك</span>
+          <span class="name">جلسة كاملة</span>
+          <span class="duration">ساعة واحدة</span>
+          <span class="price">300<sub>جنيه</sub></span>
+          <a href="#booking">احجز هذه الجلسة ←</a>
+        </div>
+        <div class="plan">
+          <span class="tag">مساحة أعمق ومتابعة</span>
+          <span class="name">جلسة مزدوجة</span>
+          <span class="duration">ساعتان</span>
+          <span class="price">600<sub>جنيه</sub></span>
+          <a href="#booking">احجز هذه الجلسة ←</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLATFORMS + METHOD -->
+  <section class="split" id="method">
+    <div class="wrap">
+      <div>
+        <h3>الجلسة بتتم من خلال</h3>
+        <p>اختار المنصة اللي مرتاح بيها، والموعد بيتحدد بعد التواصل معاك مباشرة.</p>
+        <ul class="platform-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="m3 8 9 6 9-6"/></svg>Google Meet</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 15.5c-1.2 0-2.4-.2-3.5-.6a1 1 0 0 0-1 .2l-1.6 1.6a15 15 0 0 1-6.6-6.6l1.6-1.6a1 1 0 0 0 .2-1A10 10 0 0 1 8.5 4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1c0 9.4 7.6 17 17 17a1 1 0 0 0 1-1v-3.5a1 1 0 0 0-1-1Z"/></svg>مكالمات واتساب</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m21 3-19 8 6 2 2 6 3-4 5 5 3-17Z"/></svg>مكالمات تيليجرام</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="14" height="14" rx="2"/><path d="m17 9 4-2v10l-4-2"/></svg>Zoom Meetings</li>
+        </ul>
+      </div>
+      <div>
+        <h3>المنهج — منظم حسب أهدافك</h3>
+        <p>مش كلام عام. كل جلسة بتتبني على هدف واضح، وبتتحرك خطوة خطوة معاك.</p>
+        <ul class="steps">
+          <li><div><b>تفهم الموقف</b><span>بنسمع القصة كاملة من وجهة نظرك، من غير أحكام.</span></div></li>
+          <li><div><b>تحليل النمط</b><span>بنحدد النمط السام المتكرر، ومن فين جاي.</span></div></li>
+          <li><div><b>خطة تحرك</b><span>خطوات عملية تقدر تبدأ بيها بعد الجلسة على طول.</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING -->
+  <section class="booking" id="booking">
+    <div class="wrap">
+      <div>
+        <h2>جاهز تبدأ؟</h2>
+        <p>احجز حصتك التجريبية دلوقتي، أو تواصل مباشرة على واتساب أو تيليجرام. لو مش حابب تشارك معلوماتك في الفورم، ابعتلي رسالة على طول.</p>
+        <div class="contact-chips">
+          <a class="btn btn-primary" href="https://wa.me/201000000000" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 15.5c-1.2 0-2.4-.2-3.5-.6a1 1 0 0 0-1 .2l-1.6 1.6a15 15 0 0 1-6.6-6.6l1.6-1.6a1 1 0 0 0 .2-1A10 10 0 0 1 8.5 4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1c0 9.4 7.6 17 17 17a1 1 0 0 0 1-1v-3.5a1 1 0 0 0-1-1Z"/></svg>
+            تواصل واتساب
+          </a>
+          <a class="btn btn-ghost" href="https://t.me/your_username" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m21 3-19 8 6 2 2 6 3-4 5 5 3-17Z"/></svg>
+            تواصل تيليجرام
+          </a>
+        </div>
+      </div>
+
+      <form class="form-card" id="bookingForm">
+        <div class="form-row">
+          <label for="name">الاسم</label>
+          <input id="name" type="text" placeholder="اسمك" required>
+        </div>
+        <div class="form-row">
+          <label for="topic">نوع الجلسة</label>
+          <select id="topic">
+            <option>استشارة سريعة — 20 دقيقة — 120 جنيه</option>
+            <option>جلسة كاملة — ساعة — 300 جنيه</option>
+            <option>جلسة مزدوجة — ساعتين — 600 جنيه</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="msg">وصف مختصر لموقفك (اختياري)</label>
+          <textarea id="msg" placeholder="اكتب هنا لو حابب تلخص الموقف قبل الجلسة..."></textarea>
+        </div>
+        <div class="form-row">
+          <label>فضّل التواصل عن طريق</label>
+          <div class="radio-row" id="channelRow">
+            <label class="radio-opt active">
+              <input type="radio" name="channel" value="whatsapp" checked> واتساب
+            </label>
+            <label class="radio-opt">
+              <input type="radio" name="channel" value="telegram"> تيليجرام
+            </label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">إرسال والتواصل معاك</button>
+        <p class="form-note">بعد ما تبعت الفورم، هتتحول مباشرة للمحادثة مع تفاصيلك جاهزة — هيتم التواصل معاك في أقرب وقت.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="foot-brand">وعي
+        <small>مساحة احترافية وخاصة لفهم علاقاتك وكسر أنماطها السامة.</small>
+      </div>
+    </div>
+    <div class="social">
+      <a href="https://instagram.com/your_page" target="_blank" rel="noopener" aria-label="انستجرام">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+      </a>
+      <a href="https://tiktok.com/@your_page" target="_blank" rel="noopener" aria-label="تيك توك">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 3v10.5a3.5 3.5 0 1 1-3.5-3.5c.3 0 .6 0 .9.1"/><path d="M15 3c.6 2.4 2.3 4 5 4.2"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="wrap foot-legal">
+    <span>© 2026 وعي — جميع الحقوق محفوظة</span>
+    <span>الخدمة غير متاحة لمن هم أقل من 18 سنة</span>
+  </div>
+</footer>
+
+<script>
+  // radio highlight
+  document.querySelectorAll('.radio-opt input').forEach(r=>{
+    r.addEventListener('change',()=>{
+      document.querySelectorAll('.radio-opt').forEach(o=>o.classList.remove('active'));
+      r.closest('.radio-opt').classList.add('active');
+    });
+  });
+
+  // ⚠️ استبدل الرابط ده برابط الـ Web App بتاعك اللي ينتهي بـ /exec
+  var SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwwmrKL33l-d5zhNyKZ4GkA-75Q3JeDKgvltsG0BskY5ERc-OqFuUBUecXtw_rgxtdnIw/exec';
+
+  // form -> save to Google Sheet, then route to whatsapp/telegram with prefilled message
+  document.getElementById('bookingForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = document.getElementById('name').value.trim();
+    var topic = document.getElementById('topic').value;
+    var msg = document.getElementById('msg').value.trim();
+    var channel = document.querySelector('input[name="channel"]:checked').value;
+
+    // 1) نبعت البيانات للشيت (no-cors: مفيش رد قابل للقراءة، بس البيانات بتتسجل)
+    fetch(SHEET_WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ name: name, topic: topic, msg: msg, channel: channel })
+    }).catch(function(err){
+      console.error('تعذّر إرسال البيانات للشيت:', err);
+    });
+
+    // 2) نفتح واتساب أو تيليجرام برسالة جاهزة
+    var text = 'أهلاً، اسمي ' + (name || '') + '.\nمهتم بـ: ' + topic + (msg ? ('\nملخص موقفي: ' + msg) : '');
+    var encoded = encodeURIComponent(text);
+
+    if(channel === 'whatsapp'){
+      window.open('https://wa.me/@d3vidz_?text=' + encoded, '_blank');
+    } else {
+      window.open('https://t.me/d3vidz?text=' + encoded, '_blank');
+    }
+  });
+</script>
+</body>
+</html>
