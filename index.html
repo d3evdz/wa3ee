@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>وعي - لكسر أنماط العلاقات السامة</title>
+<title>وعي — كسر أنماط العلاقات السامة</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
@@ -273,6 +273,7 @@
           </g>
           <line x1="240" y1="60" x2="240" y2="500" stroke="#0a0a0c" stroke-width="3" opacity="0.7"/>
         </svg>
+        <span class="caption">صورة تعبيرية — تباين أبيض وأسود</span>
       </div>
     </div>
   </section>
@@ -285,7 +286,7 @@
         <p>أنا هنا عشان أساعدك تفهم طبيعة علاقتك بشريكك، وتكسر النمط السام والمؤذي لو كان بيحصل معاك. مفيش حكم عليك او علي قراراتك السابقة ب اي شكل!، هنشتغل مع بعض على أرضية واضحة من أول جلسة.</p>
         <div class="disclaimer">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4m0 4h.01M10.3 3.86 1.82 18a2 2 0 0 0 1.7 3h16.96a2 2 0 0 0 1.7-3L14.7 3.86a2 2 0 0 0-3.4 0Z"/></svg>
-          <p><strong>تنويه مهم:</strong> بقدّم دعم ونصيحة بناءً على خبرتي ومحتوايا، مش بوصف أي نوع من العقاقير أو الأدوية لحالتك. لو حالتك محتاجة تدخل طبي أو نفسي متخصص، هوجهك لحد مناسب. ولو سنّك أصغر من 18 سنة، للأسف مش هقدر أساعدك.</p>
+          <p><strong>تنويه مهم:</strong> بقدّم دعم ونصيحة بناءً على خبرتي ومحتواي، ومش بوصف أي نوع من العقاقير أو الأدوية لحالتك. لو حالتك محتاجة تدخل طبي أو نفسي متخصص، هوجهك لحد مناسب. ولو سنّك أصغر من 18 سنة، للأسف مش هقدر أساعدك.</p>
         </div>
       </div>
     </div>
@@ -390,14 +391,14 @@
         </div>
         <div class="form-row">
           <label for="msg">وصف مختصر لمشكلتك</label>
-          <textarea id="msg" placeholder="تلخيص بسيط لطبيعة المشكلة قبل الجلسة..."></textarea>
+          <textarea id="msg" placeholder="اكتب هنا لو حابب تلخص الموقف قبل الجلسة..."></textarea>
         </div>
         <div class="form-row">
           <label for="goal">إيه اللي حابب تطلع بيه من الجلسة بالتحديد؟</label>
           <textarea id="goal" placeholder="مثال: أفهم ليه بكرر نفس النمط في علاقاتي..." required></textarea>
         </div>
         <div class="form-row">
-          <label>..أفضّل التواصل عن طريق</label>
+          <label>فضّل التواصل عن طريق</label>
           <div class="radio-row" id="channelRow">
             <label class="radio-opt active">
               <input type="radio" name="channel" value="whatsapp" checked> واتساب
@@ -431,6 +432,7 @@
     </div>
   </div>
   <div class="wrap foot-legal">
+    <span>© 2026 وعي — جميع الحقوق محفوظة</span>
     <span>الخدمة غير متاحة لمن هم أقل من 18 سنة</span>
   </div>
 </footer>
@@ -444,6 +446,31 @@
     });
   });
 
+  // ⚠️ استبدل الرابط ده برابط الـ Web App بتاعك اللي ينتهي بـ /exec
+  var SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbx_lc1k9gpyQvxxMkgmO3cmvC8kQhxBKaXd4LUAvQVDZGYQa4GMchWNkqLe9HXpnJo3tw/exec';
+
+  // form -> save to Google Sheet, then route to whatsapp/telegram with prefilled message
+  document.getElementById('bookingForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = document.getElementById('name').value.trim();
+    var topic = document.getElementById('topic').value;
+    var age = document.getElementById('age').value.trim();
+    var country = document.getElementById('country').value.trim();
+    var goal = document.getElementById('goal').value.trim();
+    var msg = document.getElementById('msg').value.trim();
+    var channel = document.querySelector('input[name="channel"]:checked').value;
+
+    // 1) نبعت البيانات للشيت (no-cors: مفيش رد قابل للقراءة، بس البيانات بتتسجل)
+    fetch(SHEET_WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ name: name, topic: topic, age: age, country: country, goal: goal, msg: msg, channel: channel })
+    }).catch(function(err){
+      console.error('تعذّر إرسال البيانات للشيت:', err);
+    });
+
+    // 2) نفتح واتساب أو تيليجرام برسالة جاهزة
     var text = 'أهلاً، اسمي ' + (name || '') + '.\nالعمر: ' + age + '\nبلد الإقامة: ' + country + '\nمهتم بـ: ' + topic + '\nهدفي من الجلسة: ' + goal + (msg ? ('\nملخص موقفي: ' + msg) : '');
     var encoded = encodeURIComponent(text);
 
